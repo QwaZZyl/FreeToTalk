@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.rilixtech.materialfancybutton.MaterialFancyButton
+        android:id="@+id/create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        fancy:mfb_borderColor="@color/white"
+        fancy:mfb_borderWidth="1dp"
+        fancy:mfb_defaultColor="@color/lime"
+        fancy:mfb_focusColor="#313131"
+        fancy:mfb_radius="30dp"
+        fancy:mfb_text="Create an account"
+        fancy:mfb_textColor="@color/white" />
+
+    <com.rilixtech.materialfancybutton.MaterialFancyButton
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="60dp"
+        android:paddingTop="10dp"
+        android:paddingRight="60dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create"
+        app:layout_constraintVertical_bias="0.07"
+        fancy:mfb_borderColor="@color/white"
+        fancy:mfb_borderWidth="1dp"
+        fancy:mfb_defaultColor="@color/lime"
+        fancy:mfb_focusColor="#313131"
+        fancy:mfb_radius="50dp"
+        fancy:mfb_text="Sing In"
+        fancy:mfb_textColor="@color/white" />
+
+    <com.rilixtech.materialfancybutton.MaterialFancyButton
+        android:id="@+id/btn_google"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="212dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintVertical_bias="0.515"
+        fancy:mfb_defaultColor="@color/red"
+        fancy:mfb_focusColor="#313131"
+        fancy:mfb_iconPaddingLeft="0dp"
+        fancy:mfb_iconPaddingRight="0dp"
+        fancy:mfb_iconResource="@drawable/ic_gplus"
+        fancy:mfb_radius="30dp" />
+
+    <com.rilixtech.materialfancybutton.MaterialFancyButton
+        android:id="@+id/btn_facebook"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.242"
+        app:layout_constraintStart_toEndOf="@+id/btn_google"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintVertical_bias="0.515"
+        fancy:mfb_defaultColor="@color/blue"
+        fancy:mfb_focusColor="#313131"
+        fancy:mfb_iconPaddingLeft="0dp"
+        fancy:mfb_iconPaddingRight="0dp"
+        fancy:mfb_iconResource="@drawable/ic_facebook"
+        fancy:mfb_radius="30dp"
+        fancy:mfb_textSize="30sp" >
+    </com.rilixtech.materialfancybutton.MaterialFancyButton>
+
+    <TextView
+        android:id="@+id/txt_or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="Or"
+        app:layout_constraintBottom_toTopOf="@+id/btn_google"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        tools:layout_editor_absoluteX="289dp" />
+
+
+
+</android.support.constraint.ConstraintLayout>
