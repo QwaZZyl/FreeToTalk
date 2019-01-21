@@ -3,12 +3,11 @@
     android:opacity="opaque">
 
     <item
-        android:drawable="@color/black"/>
-
+        android:drawable="@drawable/gradient"/>
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_testlogo"/>
+            android:src="@drawable/logo"/>
     </item>
 
 </layer-list>
