@@ -1,15 +1,13 @@
 package com.karavatskiy.serhii.babushkachat.base.ui;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-
 import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Created by Serhii on 11.01.2019.
  */
-public abstract class BaseFragmentDI<A extends AppCompatActivity> extends Fragment {
+public abstract class BaseFragmentDI<A extends AppCompatActivity> extends BaseFragment {
 
     protected A activity;
 

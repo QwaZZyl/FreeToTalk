@@ -14,14 +14,18 @@ import com.karavatskiy.serhii.babushkachat.R;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.llMask)
+    View llMask;
+
     protected abstract void setupUi();
+
     protected abstract void setupData();
 
     protected abstract int getLayoutId();
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.llMask)
-    View llMask;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +37,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         setupUi();
         setupData();
     }
-    public void showProgress(){
+
+    public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
         llMask.setVisibility(View.VISIBLE);
     }
-    public void hideProgress(){
+
+    public void hideProgress() {
         progressBar.setVisibility(View.GONE);
         llMask.setVisibility(View.GONE);
     }

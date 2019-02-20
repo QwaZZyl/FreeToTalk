@@ -2,16 +2,11 @@ package com.karavatskiy.serhii.babushkachat.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.google.firebase.auth.FirebaseAuth;
 import com.karavatskiy.serhii.babushkachat.R;
 import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
@@ -51,7 +46,6 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
     @Inject
     ValidatorSignIn validatorSignIn;
 
-
     public static LoginFragment newInstance() {
         Bundle args = new Bundle();
         LoginFragment fragment = new LoginFragment();
@@ -59,23 +53,18 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_login, null);
-        ButterKnife.bind(this, root);
-        initOnClicks(); // TODO: 21.01.2019 to base fragment
-        return root;
+    protected int getLayout() {
+        return R.layout.fragment_login;
     }
 
     @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void setupData() {
         activity.hideProgress();
     }
 
-    private void initOnClicks() {
+    @Override
+    protected void initOnClickListeners() {
         tvCreateAcc.setOnClickListener(v -> activity.showSignUpFragment());
         btnSignInFace.setOnClickListener(v -> loginFragmentPresenter.facebookSignIn(this));
         btnSignInGoogle.setOnClickListener(v -> loginFragmentPresenter.signInWithGoogle(this));
@@ -89,22 +78,8 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
     }
 
     private boolean validate(String eMail, String password) {
-        etEmail.setError(null);
-        validatorSignIn.validateEmail(eMail, error -> {
-            if (error != null) {
-                etEmail.setError(error);
-            } else {
-                etEmail.setError(null);
-            }
-        });
-
-        validatorSignIn.validatePass(password, error -> {
-            if (error != null) {
-                etPassword.setError(error);
-            } else {
-                etPassword.setError(null);
-            }
-        });
+        validatorSignIn.validateEmail(eMail, error -> etEmail.setError(error));
+        validatorSignIn.validatePass(password, error -> etPassword.setError(error));
         return validatorSignIn.isLoginValid();
     }
 
