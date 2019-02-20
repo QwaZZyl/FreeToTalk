@@ -1,110 +1,188 @@
 package com.karavatskiy.serhii.babushkachat.ui.login;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.util.Log;
+import static com.karavatskiy.serhii.babushkachat.ui.login.LoginFragment.TAG;
 
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.karavatskiy.serhii.babushkachat.R;
-import com.karavatskiy.serhii.babushkachat.ui.UiUtils;
-
-import javax.inject.Inject;
-
-import static com.karavatskiy.serhii.babushkachat.ui.login.LoginFragment.TAG;
+import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
+import com.karavatskiy.serhii.babushkachat.utils.FirebaseRx;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.Arrays;
 
 /**
  * Created by Serhii on 12.01.2019.
  */
-public class LoginFragmentPresenter implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragmentPresenter {
 
     static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth firebaseAuth;
 
-    @Inject
-    GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
 
-    private Fragment fragment;
+    private OnCompleteListener onCompleteListener;
 
-    private OnSignInListener onSignInListener;
+    private GoogleSignInOptions googleSignInOptions;
 
-    LoginFragmentPresenter(FirebaseAuth firebaseAuth) {
+    private CompositeDisposable compositeDisposable;
+
+    private CallbackManager facebookCallbackManager;
+
+    public LoginFragmentPresenter(FirebaseAuth firebaseAuth, Fragment fragment) {
         this.firebaseAuth = firebaseAuth;
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        compositeDisposable = new CompositeDisposable();
+        setupSignInFacebook();
+        createGoogleApiClient(fragment);
     }
 
+    public void setupSignInFacebook() {
+        facebookCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                firebaseAuthWithFacebookCredential(loginResult.getAccessToken());
+            }
 
-    public void setOnSignInListener(OnSignInListener onSignInListener) {
-        this.onSignInListener = onSignInListener;
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+            }
+        });
     }
 
-    void setFragment(Fragment fragment) {
-        this.fragment = fragment;
+    void facebookSignIn(Fragment fragment) {
+        LoginManager.getInstance().logInWithReadPermissions(fragment, Arrays.asList("public_profile"));
     }
 
+    void facebookSignInResult(int requestCode, int resultCode, Intent data) {
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
-    void signInAction() {
+    private void firebaseAuthWithFacebookCredential(AccessToken token) {
+        Log.d(TAG, "firebaseAuthWithFacebookCredential:" + token);
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        Disposable disposable = FirebaseRx.rxSignInWithCredential(firebaseAuth, credential)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(firebaseUser ->
+                        Log.d(TAG, "firebaseAuthWithFacebookCredential: " + firebaseUser.getDisplayName()));
+        compositeDisposable.add(disposable);
+    }
+
+    private void createGoogleApiClient(Fragment fragment) {
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(fragment.getString(R.string.firebase_id))
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(fragment.requireContext())
+                .enableAutoManage(fragment.requireActivity(), connectionResult -> {
+
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
+    }
+
+    void signInWithGoogle(LoginFragment loginFragment) {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        fragment.startActivityForResult(signInIntent, RC_SIGN_IN);
+        loginFragment.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    void signInFireBaseEmail(String email, String password) {
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        onSignInListener.onSignInSuccess("Sign in success with mail");
-                        onSignInListener.onSignInSuccess(user.getDisplayName());
-
-                    } else {
-                        onSignInListener.onSignInFailure("signInWithCredential:failure");
-                    }
-
-                    // ...
-                });
+    void googleSignInResult(int requestCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogleCredential(account);
+            } catch (ApiException e) {
+                Log.w(TAG, "Google sign in failed", e); // Internal error
+            }
+        }
     }
 
-    void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
+    private void firebaseAuthWithGoogleCredential(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogleCredential:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        onSignInListener.onSignInSuccess("Sign in success");
-                        onSignInListener.onSignInSuccess(user.getDisplayName());
-                        //  updateUI(user);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        onSignInListener.onSignInFailure("signInWithCredential:failure");
-                    }
-                });
+        Disposable disposable = FirebaseRx.rxSignInWithCredential(firebaseAuth, credential)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        firebaseUser -> Log.d(TAG, "firebaseAuthWithGoogleCredential: " + firebaseUser.getEmail()));
+        compositeDisposable.add(disposable);
+    }
+
+    void signInFirebaseEmail(String email, String password) {
+        Disposable disposable = FirebaseRx.rxSignInWithEmailAndPassword(firebaseAuth, email, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(firebaseUser -> onCompleteListener.onSuccess(),
+                        throwable -> onCompleteListener.onError(throwable));
+        compositeDisposable.add(disposable);
     }
 
 
-    void signOut() {
-        UiUtils.toast(fragment.requireActivity(), "signout success");
+    void fullSignOut(Fragment fragment) {
         firebaseAuth.signOut();
+        facebookSignOut();
+        googleSignOut(fragment);
+        Log.d(TAG, "fullSignOut: success");
     }
 
+    private void facebookSignOut() {
+        AccessToken token = AccessToken.getCurrentAccessToken();
+        if (token != null) {
+            LoginManager.getInstance().logOut();
+        }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
+    private void googleSignOut(Fragment fragment) {
+        GoogleSignInClient googleSignInClient = GoogleSignIn
+                .getClient(fragment.requireActivity(), googleSignInOptions);
+        if (googleApiClient.isConnected()) {
+            googleSignInClient.signOut();
+        }
+    }
+
+    public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
+        this.onCompleteListener = onCompleteListener;
+    }
+
+    void disposeAll() {
+        compositeDisposable.clear();
+    }
+
+    void onPause(FragmentActivity activity) {
+        if (googleApiClient != null) {
+            googleApiClient.stopAutoManage(activity);
+            googleApiClient.disconnect();
+        }
     }
 }

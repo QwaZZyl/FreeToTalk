@@ -1,16 +1,9 @@
 package com.karavatskiy.serhii.babushkachat.ui.login;
 
-import android.content.Context;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.karavatskiy.serhii.babushkachat.R;
 
-import javax.inject.Singleton;
-
+import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
+import com.karavatskiy.serhii.babushkachat.utils.ValidatorSignIn;
 import dagger.Module;
 import dagger.Provides;
 
@@ -21,25 +14,20 @@ import dagger.Provides;
 public class LoginFragmentModule {
 
     @Provides
-    OnSignInListener providesOnSignInListener(LoginFragment loginFragment) {
+    OnCompleteListener providesOnCompleteListener(LoginFragment loginFragment) {
         return loginFragment;
     }
 
     @Provides
-    GoogleApiClient provideGoogleApiClient(LoginFragment loginFragment) {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(loginFragment.getString(R.string.firebase_id))
-                .requestEmail()
-                .build();
-        return new GoogleApiClient.Builder(loginFragment.requireContext())
-                .enableAutoManage(loginFragment.requireActivity(), loginFragment)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+    LoginFragmentPresenter providesLoginFragmentPresenter(FirebaseAuth auth, OnCompleteListener onCompleteListener,
+            LoginFragment loginFragment) {
+        LoginFragmentPresenter loginFragmentPresenter = new LoginFragmentPresenter(auth,loginFragment);
+        loginFragmentPresenter.setOnCompleteListener(onCompleteListener);
+        return loginFragmentPresenter;
     }
 
     @Provides
-    LoginFragmentPresenter providesLoginFragmentPresenter(FirebaseAuth auth, OnSignInListener onSignInListener) {
-        LoginFragmentPresenter loginFragmentPresenter = new LoginFragmentPresenter(auth);
-        loginFragmentPresenter.setOnSignInListener(onSignInListener);
-        return loginFragmentPresenter;
+    ValidatorSignIn provideValidatorSignIn() {
+        return new ValidatorSignIn();
     }
 }

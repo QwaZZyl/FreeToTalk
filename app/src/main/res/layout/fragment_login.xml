@@ -2,38 +2,34 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <TextView
-        android:id="@+id/tvWelcome"
+        android:id="@+id/tvSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/agency_fb_bold"
-        android:text="@string/fg_login_welcome"
+        android:text="@string/fg_login_signin"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/tilLoginEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.678" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="@dimen/ddble_margin"
+        android:layout_marginTop="@dimen/ddble_margin"
+        />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilLoginEmail"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29">
+        android:layout_marginTop="@dimen/ddble_margin"
+        app:layout_constraintTop_toBottomOf="@id/tvSignIn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shape"
@@ -55,6 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tilLoginEmail">
 
         <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shape"
@@ -64,12 +61,12 @@
     </android.support.design.widget.TextInputLayout>
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSignIn"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:layout_marginTop="@dimen/default_margin"
-        android:paddingBottom="10dp"
+        android:layout_marginTop="@dimen/ddble_margin"
         android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tilLoginPassword"
         app:layout_constraintStart_toStartOf="@+id/tilLoginPassword"
@@ -80,19 +77,18 @@
         fancy:mfb_defaultColor="@color/stone"
         fancy:mfb_focusColor="#313131"
         fancy:mfb_radius="10dp"
-        fancy:mfb_text="@string/fg_login_btn"
-        fancy:mfb_textColor="@color/white" />
+        fancy:mfb_textColor="@color/white"
+        app:mfb_text="@string/btn_sign_in" />
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
         android:id="@+id/btnSignInGoogle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:padding="2dp"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/half_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/btnLogin"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintStart_toStartOf="@+id/btnSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
         app:layout_constraintVertical_bias="0.055"
         fancy:mfb_defaultColor="@color/red"
         fancy:mfb_focusColor="#313131"
@@ -105,12 +101,11 @@
         android:id="@+id/btnSignInFace"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="8dp"
-        android:padding="2dp"
+        android:layout_marginTop="@dimen/half_margin"
+        android:layout_marginEnd="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
         app:layout_constraintVertical_bias="0.055"
         fancy:mfb_defaultColor="@color/blue"
         fancy:mfb_focusColor="#313131"
@@ -130,23 +125,36 @@
         app:layout_constraintEnd_toStartOf="@+id/btnSignInFace"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnSignInGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.6" />
+        app:layout_constraintTop_toTopOf="@id/btnSignInGoogle"
+        />
+
+    <TextView
+        android:id="@+id/tvCreateAccInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/fg_login_create_text"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignInFace"
+        app:layout_constraintStart_toStartOf="@+id/btnSignInGoogle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_txt_or"
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/tvCreateAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:clickable="true"
-        android:text="@string/fg_login_create_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.575"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_txt_or"
-        app:layout_constraintVertical_bias="0.14" />
+        android:gravity="center"
+        android:text="@string/fg_login_create_new_text"
+        app:layout_constraintEnd_toEndOf="@id/tvCreateAccInfo"
+        app:layout_constraintStart_toStartOf="@id/tvCreateAccInfo"
+        app:layout_constraintTop_toBottomOf="@id/tvCreateAccInfo"
+        android:focusable="true" />
+
 </android.support.constraint.ConstraintLayout>

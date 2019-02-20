@@ -7,10 +7,10 @@ import dagger.Provides;
 
 @Module
 public abstract class MainActivityModule {
+
     @Provides
     @Named("unique_string_id")
     static String provideName(){
         return "I love Medium";
     }
-
 }

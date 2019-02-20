@@ -3,45 +3,43 @@ package com.karavatskiy.serhii.babushkachat.ui.login;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.karavatskiy.serhii.babushkachat.R;
-import com.karavatskiy.serhii.babushkachat.base.BaseFragmentDI;
-import com.karavatskiy.serhii.babushkachat.ui.UiUtils;
+import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
+import com.karavatskiy.serhii.babushkachat.base.ui.BaseFragmentDI;
+import com.karavatskiy.serhii.babushkachat.utils.ValidatorSignIn;
 import javax.inject.Inject;
 
-public class RegistrationFragment extends BaseFragmentDI<LoginActivity> implements OnRegistrationCompliteListener {
+public class RegistrationFragment extends BaseFragmentDI<LoginActivity> implements OnCompleteListener {
+
+    public static final String TAG = "RegistrationFragment";
 
     @BindView(R.id.btnCreateNewAcc)
     View btnCreateNewAcc;
 
-    @BindView(R.id.tilSignUpEmail)
-    TextInputLayout tilSignUpEmail;
+    @BindView(R.id.etEmail)
+    AppCompatEditText etEmail;
 
-    @BindView(R.id.tilSignUpUserName)
-    TextInputLayout tilSignUpUserName;
+    @BindView(R.id.etUserName)
+    AppCompatEditText etUserName;
 
-    @BindView(R.id.tilSignUpPassword)
-    TextInputLayout tilSignUpPassword;
+    @BindView(R.id.etPassword)
+    AppCompatEditText etPassword;
 
-    @BindView(R.id.tilSignUpConfirmPassword)
-    TextInputLayout tilSignUpConfirmPassword;
+    @BindView(R.id.etConfirmPassword)
+    AppCompatEditText etConfirmPassword;
+
+    @Inject
+    ValidatorSignIn validatorSignIn;
 
     @Inject
     RegistrationFragmentPresenter registrationFragmentPresenter;
-
-    private AppCompatEditText etEmail;
-
-    private AppCompatEditText ettUserName;
-
-    private AppCompatEditText etPassword;
-
-    private AppCompatEditText etConfirmPassword;
 
 
     public static RegistrationFragment newInstance() {
@@ -60,10 +58,6 @@ public class RegistrationFragment extends BaseFragmentDI<LoginActivity> implemen
         View root = inflater.inflate(R.layout.fragment_registration, null);
         ButterKnife.bind(this, root);
 
-        etEmail = (AppCompatEditText) tilSignUpEmail.getEditText();
-        ettUserName = (AppCompatEditText) tilSignUpUserName.getEditText();
-        etPassword = (AppCompatEditText) tilSignUpPassword.getEditText();
-        etConfirmPassword = (AppCompatEditText) tilSignUpConfirmPassword.getEditText();
         initOnClicks();
 
         return root;
@@ -71,38 +65,63 @@ public class RegistrationFragment extends BaseFragmentDI<LoginActivity> implemen
 
     private void initOnClicks() {
         btnCreateNewAcc.setOnClickListener(v -> {
-            if (validate(etEmail.getText().toString(), ettUserName.getText().toString(),
-                    etPassword.getText().toString(), etConfirmPassword.getText().toString())) {
-                registrationFragmentPresenter.requestRegistration(etEmail.getText().toString(),
-                        etPassword.getText().toString());
+            if (checkInputData(etEmail.getEditableText().toString(),
+                    etUserName.getEditableText().toString(),
+                    etPassword.getEditableText().toString(),
+                    etConfirmPassword.getEditableText().toString())) {
+                registrationFragmentPresenter.requestRegistration(etEmail.getEditableText().toString(),
+                        etPassword.getEditableText().toString());
             }
         });
     }
 
 
-    private boolean validate(String email, String userName, String password, String confirmPassword) {
-        // Reset errors.
-        etEmail.setError(null);
-        ettUserName.setError(null);
-        etPassword.setError(null);
-        etConfirmPassword.setError(null);
+    private boolean checkInputData(String email, String userName, String password, String confirmPassword) {
 
-        Validator validator = new Validator();
-        etEmail.setError(validator.validateEmail(email));
-        ettUserName.setError(validator.validateUserName(userName));
-        etPassword.setError(validator.validatePass(password));
-        etConfirmPassword.setError(validator.validateConfirmPass(password, confirmPassword));
+        validatorSignIn.validateEmail(email, error -> {
+                    if (error != null) {
+                        etEmail.setError(error);
+                    } else {
+                        etEmail.setError(null);
+                    }
+                }
+        );
+        validatorSignIn.validateUserName(userName, error -> {
+            if (error != null) {
+                etUserName.setError(error);
+            } else {
+                etUserName.setError(null);
+            }
+        });
+        validatorSignIn.validatePass(password, error -> {
+            if (error != null) {
+                etPassword.setError(error);
+            } else {
+                etPassword.setError(null);
+            }
+        });
+        validatorSignIn.validateConfirmPass(password, confirmPassword, error -> {
+            if (error != null) {
+                etConfirmPassword.setError(error);
+            } else {
+                etConfirmPassword.setError(null);
+            }
+        });
 
-        return validator.isValidatedRegistration();
+        return validatorSignIn.isValidatedRegistration();
     }
 
     @Override
-    public void onRegistrationSuccess(String msg) {
-        UiUtils.toast(activity, msg);
+    public void onSuccess() {
+        activity.hideProgress();
+        activity.goToChannelList();
     }
 
     @Override
-    public void onRegistrationError(String msg) {
-        UiUtils.toast(activity, msg);
+    public void onError(final Throwable throwable) {
+        activity.hideProgress();
+        Log.d(TAG, "onError: " + throwable);
     }
+
+
 }

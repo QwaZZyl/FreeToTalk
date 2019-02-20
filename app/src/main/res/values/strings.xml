@@ -1,14 +1,25 @@
 <resources>
+
+    <!-- General -->
     <string name="app_name">BabushkaChat</string>
+    <string name="message_double_click_exit">Click BACK again to exit</string>
+
+
+    <!-- SignIn -->
     <string name="fg_reg_create_btn">Create an account</string>
-    <string name="fg_login_btn">Login</string>
+    <string name="btn_sign_in">Sign In</string>
     <string name="fg_login_with">or with</string>
-    <string name="fg_login_welcome">Login to your an account</string>
+    <string name="fg_login_signin">Sign In</string>
     <string name="fg_hint_password">Password</string>
     <string name="fg_hint_email">Email</string>
     <string name="fg_tv_sign_up">Sign up</string>
     <string name="fg_reg_hint_user_name">User name</string>
     <string name="fg_hint_repeat_password">Repeat password</string>
-    <string name="fg_login_create_text">Still haven`t?\n<u>Create new</u> account it take a few second</string>
+    <string name="fg_login_create_text">Still haven`t account?</string>
+    <string name="fg_login_create_new_text"><u>Create new</u></string>
+
+    <!-- System constants -->
+    <string name="facebook_id">2113412368720227</string>
+    <string name="facebook_schema_id">fb2113412368720227</string>
     <string name="firebase_id">149036140724-8r2vfibqp770s82t902rse3oqe9jfv35.apps.googleusercontent.com</string>
 </resources>

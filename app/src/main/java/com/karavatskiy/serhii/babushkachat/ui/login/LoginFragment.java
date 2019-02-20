@@ -4,39 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.Task;
-import com.karavatskiy.serhii.babushkachat.R;
-import com.karavatskiy.serhii.babushkachat.base.BaseFragmentDI;
-import com.karavatskiy.serhii.babushkachat.ui.UiUtils;
-
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.karavatskiy.serhii.babushkachat.ui.login.LoginFragmentPresenter.RC_SIGN_IN;
+import com.google.firebase.auth.FirebaseAuth;
+import com.karavatskiy.serhii.babushkachat.R;
+import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
+import com.karavatskiy.serhii.babushkachat.base.ui.BaseFragmentDI;
+import com.karavatskiy.serhii.babushkachat.utils.ValidatorSignIn;
+import javax.inject.Inject;
 
 public class LoginFragment extends BaseFragmentDI<LoginActivity>
-        implements GoogleApiClient.OnConnectionFailedListener, OnSignInListener {
+        implements OnCompleteListener {
 
     public static final String TAG = "LoginFragment";
 
-    @BindView(R.id.btnLogin)
-    View btnLogin;
+    @BindView(R.id.btnSignIn)
+    View btnSignIn;
 
     @BindView(R.id.btnSignInFace)
     View btnSignInFace;
@@ -44,24 +33,24 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
     @BindView(R.id.btnSignInGoogle)
     View btnSignInGoogle;
 
-    @BindView(R.id.tilLoginEmail)
-    TextInputLayout tilLoginEmail;
-
-    @BindView(R.id.tilLoginPassword)
-    TextInputLayout tilLoginPassword;
-
     @BindView(R.id.tvCreateAcc)
     TextView tvCreateAcc;
+
+    @BindView(R.id.etEmail)
+    AppCompatEditText etEmail;
+
+    @BindView(R.id.etPassword)
+    AppCompatEditText etPassword;
 
     @Inject
     LoginFragmentPresenter loginFragmentPresenter;
 
     @Inject
-    GoogleApiClient googleApiClient;
+    FirebaseAuth firebaseAuth;
 
-    private AppCompatEditText etEmail;
+    @Inject
+    ValidatorSignIn validatorSignIn;
 
-    private AppCompatEditText etPassword;
 
     public static LoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -73,77 +62,81 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_login, null);
         ButterKnife.bind(this, root);
-        etEmail = (AppCompatEditText) tilLoginEmail.getEditText();
-        etPassword = (AppCompatEditText) tilLoginPassword.getEditText();
-        loginFragmentPresenter.setFragment(this);
-        initOnClicks();
+        initOnClicks(); // TODO: 21.01.2019 to base fragment
         return root;
     }
 
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        activity.hideProgress();
+    }
+
     private void initOnClicks() {
-        tvCreateAcc.setOnClickListener(v -> activity.changeFragment());
-        btnSignInFace.setOnClickListener(v -> loginFragmentPresenter.signOut());
-        btnSignInGoogle.setOnClickListener(v -> {
-            loginFragmentPresenter.signInAction();
-        });
-        btnLogin.setOnClickListener(v -> {
-            if (check(etEmail.getText().toString(), etPassword.getText().toString()))
-                loginFragmentPresenter
-                        .signInFireBaseEmail(etEmail.getText().toString(), etPassword.getText().toString());
+        tvCreateAcc.setOnClickListener(v -> activity.showSignUpFragment());
+        btnSignInFace.setOnClickListener(v -> loginFragmentPresenter.facebookSignIn(this));
+        btnSignInGoogle.setOnClickListener(v -> loginFragmentPresenter.signInWithGoogle(this));
+        btnSignIn.setOnClickListener(v -> {
+            if (validate(etEmail.getEditableText().toString(), etPassword.getEditableText().toString())) {
+                loginFragmentPresenter.signInFirebaseEmail(etEmail.getEditableText().toString(),
+                        etPassword.getEditableText().toString());
+                activity.showProgress();
+            }
         });
     }
 
-    private boolean check(String eMail, String password) {
-        Validator validator = new Validator();
+    private boolean validate(String eMail, String password) {
         etEmail.setError(null);
-        etPassword.setError(null);
-        etPassword.setError(validator.validatePass(password));
-        etEmail.setError(validator.validateEmail(eMail));
-        return validator.isValidatedLogin();
+        validatorSignIn.validateEmail(eMail, error -> {
+            if (error != null) {
+                etEmail.setError(error);
+            } else {
+                etEmail.setError(null);
+            }
+        });
+
+        validatorSignIn.validatePass(password, error -> {
+            if (error != null) {
+                etPassword.setError(error);
+            } else {
+                etPassword.setError(null);
+            }
+        });
+        return validatorSignIn.isLoginValid();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                loginFragmentPresenter.firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                // ...
-            }
-        }
+        loginFragmentPresenter.facebookSignInResult(requestCode, resultCode, data);
+        loginFragmentPresenter.googleSignInResult(requestCode, data);
+    }
+
+    @Override
+    public void onSuccess() {
+        activity.hideProgress();
+        activity.goToChannelList();
+    }
+
+    @Override
+    public void onError(final Throwable throwable) {
+        activity.hideProgress();
+        Log.d(TAG, "onError:" + throwable);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (googleApiClient != null) {
-            googleApiClient.stopAutoManage(activity);
-            googleApiClient.disconnect();
-        }
+        loginFragmentPresenter.onPause(activity);
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onStop() {
+        super.onStop();
+        loginFragmentPresenter.disposeAll();
     }
 
-
-    @Override
-    public void onSignInSuccess(String message) {
-        UiUtils.toast(activity, message);
-    }
-
-    @Override
-    public void onSignInFailure(String message) {
-        UiUtils.toast(activity, message);
-    }
 }

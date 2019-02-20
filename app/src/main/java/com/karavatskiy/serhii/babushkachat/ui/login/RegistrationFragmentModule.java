@@ -2,6 +2,8 @@ package com.karavatskiy.serhii.babushkachat.ui.login;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.karavatskiy.serhii.babushkachat.base.callback.OnCompleteListener;
+import com.karavatskiy.serhii.babushkachat.utils.ValidatorSignIn;
 import dagger.Module;
 import dagger.Provides;
 
@@ -12,16 +14,20 @@ import dagger.Provides;
 public class RegistrationFragmentModule {
 
     @Provides
-    OnRegistrationCompliteListener provideOnRegistrationCompleteListener(RegistrationFragment registrationFragment) {
+    OnCompleteListener provideOnRegistrationCompleteListener(RegistrationFragment registrationFragment) {
         return registrationFragment;
     }
 
     @Provides
     RegistrationFragmentPresenter provideRegistrationFragmentPresenter(FirebaseAuth auth,
-            OnRegistrationCompliteListener onRegistrationCompliteListener) {
+            OnCompleteListener onCompleteListener) {
         RegistrationFragmentPresenter registrationFragmentPresenter =
                 new RegistrationFragmentPresenter(auth);
-        registrationFragmentPresenter.setOnRegistrationCompliteListener(onRegistrationCompliteListener);
+        registrationFragmentPresenter.setOnCompleteListener(onCompleteListener);
         return registrationFragmentPresenter;
+    }
+    @Provides
+    ValidatorSignIn provideValidatorSignIn(){
+        return new ValidatorSignIn();
     }
 }

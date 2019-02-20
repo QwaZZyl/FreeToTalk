@@ -1,4 +1,4 @@
-package com.karavatskiy.serhii.babushkachat.ui;
+package com.karavatskiy.serhii.babushkachat.utils;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -15,9 +15,8 @@ public class UiUtils {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
-
-    public static void replaceFragment(FragmentManager fm, int containerId, Fragment fragment, String tag) {
-        fm.beginTransaction()
+    public static void replaceFragment(FragmentManager fragmentManager, int containerId, Fragment fragment, String tag) {
+        fragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(containerId, fragment, tag)
                 .addToBackStack(tag)
