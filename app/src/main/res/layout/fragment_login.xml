@@ -10,41 +10,36 @@
         android:id="@+id/tvSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/agency_fb_bold"
-        android:text="@string/fg_login_signin"
-        android:textSize="32sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="@dimen/ddble_margin"
         android:layout_marginTop="@dimen/ddble_margin"
-        />
+        android:fontFamily="@font/agency_fb_bold"
+        android:text="@string/fg_login_signin"
+        android:textSize="@dimen/big_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilLoginEmail"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ddble_margin"
-        app:layout_constraintTop_toBottomOf="@id/tvSignIn"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSignIn">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_hint_email"
-            android:inputType="textEmailAddress"
-            android:padding="10dp" />
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilLoginPassword"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
         app:layout_constraintEnd_toEndOf="@+id/tilLoginEmail"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tilLoginEmail"
@@ -52,92 +47,66 @@
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_hint_password"
-            android:inputType="textPassword"
-            android:padding="10dp" />
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
         android:id="@+id/btnSignIn"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        style="@style/ShapedButton"
         android:layout_marginTop="@dimen/ddble_margin"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tilLoginPassword"
         app:layout_constraintStart_toStartOf="@+id/tilLoginPassword"
         app:layout_constraintTop_toBottomOf="@+id/tilLoginPassword"
         app:layout_constraintVertical_bias="0.0"
-        fancy:mfb_borderColor="@color/white"
-        fancy:mfb_borderWidth="1dp"
-        fancy:mfb_defaultColor="@color/stone"
-        fancy:mfb_focusColor="#313131"
-        fancy:mfb_radius="10dp"
-        fancy:mfb_textColor="@color/white"
         app:mfb_text="@string/btn_sign_in" />
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
         android:id="@+id/btnSignInGoogle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        style="@style/CircleButton"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/half_margin"
+        android:layout_marginTop="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/btnSignIn"
         app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.055"
+        app:layout_constraintVertical_bias="0"
         fancy:mfb_defaultColor="@color/red"
-        fancy:mfb_focusColor="#313131"
-        fancy:mfb_iconPaddingLeft="0dp"
-        fancy:mfb_iconPaddingRight="0dp"
-        fancy:mfb_iconResource="@drawable/ic_gplus"
-        fancy:mfb_radius="30dp" />
+        fancy:mfb_iconResource="@drawable/ic_gplus" />
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
         android:id="@+id/btnSignInFace"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="@dimen/half_margin"
+        style="@style/CircleButton"
         android:layout_marginEnd="@dimen/default_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSignInGoogle"
         app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.055"
+        app:layout_constraintTop_toTopOf="@+id/btnSignInGoogle"
+        app:layout_constraintVertical_bias="0"
         fancy:mfb_defaultColor="@color/blue"
-        fancy:mfb_focusColor="#313131"
-        fancy:mfb_iconPaddingLeft="0dp"
-        fancy:mfb_iconPaddingRight="0dp"
-        fancy:mfb_iconResource="@drawable/ic_facebook"
-        fancy:mfb_radius="30dp"
-        fancy:mfb_textSize="30sp" />
+        fancy:mfb_focusColor="@color/focusColor"
+        fancy:mfb_iconResource="@drawable/ic_facebook" />
 
     <TextView
         android:id="@+id/tv_txt_or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="@string/fg_login_with"
         app:layout_constraintBottom_toBottomOf="@+id/btnSignInFace"
         app:layout_constraintEnd_toStartOf="@+id/btnSignInFace"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnSignInGoogle"
-        app:layout_constraintTop_toTopOf="@id/btnSignInGoogle"
-        />
+        app:layout_constraintTop_toTopOf="@id/btnSignInGoogle" />
 
     <TextView
         android:id="@+id/tvCreateAccInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:gravity="center"
         android:text="@string/fg_login_create_text"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btnSignInFace"
         app:layout_constraintStart_toStartOf="@+id/btnSignInGoogle"
@@ -148,13 +117,12 @@
         android:id="@+id/tvCreateAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:text="@string/fg_login_create_new_text"
         app:layout_constraintEnd_toEndOf="@id/tvCreateAccInfo"
         app:layout_constraintStart_toStartOf="@id/tvCreateAccInfo"
-        app:layout_constraintTop_toBottomOf="@id/tvCreateAccInfo"
-        android:focusable="true" />
+        app:layout_constraintTop_toBottomOf="@id/tvCreateAccInfo" />
 
 </android.support.constraint.ConstraintLayout>

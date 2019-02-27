@@ -7,121 +7,94 @@
 
     <com.rilixtech.materialfancybutton.MaterialFancyButton
         android:id="@+id/btnCreateNewAcc"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        style="@style/ShapedButton"
         android:layout_marginTop="@dimen/ddble_margin"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/tilSignUpConfirmPassword"
         app:layout_constraintRight_toRightOf="@id/tilSignUpConfirmPassword"
         app:layout_constraintTop_toBottomOf="@id/tilSignUpConfirmPassword"
-        fancy:mfb_borderColor="@color/white"
-        fancy:mfb_borderWidth="1dp"
-        fancy:mfb_defaultColor="@color/stone"
-        fancy:mfb_focusColor="#313131"
-        fancy:mfb_radius="10dp"
-        fancy:mfb_text="@string/fg_reg_create_btn"
-        fancy:mfb_textColor="@color/white" />
+        fancy:mfb_text="@string/fg_reg_create_btn" />
 
     <TextView
         android:id="@+id/tvSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/half_margin"
         android:layout_marginEnd="@dimen/ddble_margin"
         android:layout_marginTop="@dimen/ddble_margin"
         android:fontFamily="@font/agency_fb_bold"
         android:text="@string/fg_tv_sign_up"
-        android:textSize="36sp"
+        android:textSize="@dimen/big_text"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilSignUpEmail"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/twenty_margin"
-        android:ems="10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSignUp"
-        app:layout_constraintVertical_bias="0.003">
+        app:layout_constraintVertical_bias="0">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_hint_email"
-            android:inputType="textEmailAddress"
-            android:padding="10dp" />
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilSignUpUserName"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
         android:selectAllOnFocus="false"
-        android:singleLine="false"
         app:layout_constraintEnd_toEndOf="@+id/tilSignUpEmail"
         app:layout_constraintLeft_toLeftOf="@id/tilSignUpEmail"
         app:layout_constraintTop_toBottomOf="@+id/tilSignUpEmail">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_reg_hint_user_name"
-            android:inputType="textEmailAddress"
-            android:padding="10dp" />
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilSignUpPassword"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
         app:layout_constraintLeft_toLeftOf="@id/tilSignUpUserName"
         app:layout_constraintRight_toRightOf="@id/tilSignUpUserName"
         app:layout_constraintTop_toBottomOf="@id/tilSignUpUserName">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_hint_password"
-            android:inputType="textPassword"
-            android:padding="10dp" />
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tilSignUpConfirmPassword"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/two_h_margin"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
         app:layout_constraintLeft_toLeftOf="@id/tilSignUpPassword"
         app:layout_constraintRight_toRightOf="@id/tilSignUpPassword"
         app:layout_constraintTop_toBottomOf="@id/tilSignUpPassword">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etConfirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/bg_shape"
+            style="@style/TextInputField"
             android:hint="@string/fg_hint_repeat_password"
-            android:inputType="textPassword"
-            android:padding="10dp" />
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
 

@@ -4,13 +4,39 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/stone</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
+    <style name="TextInputField" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_shape</item>
+        <item name="android:padding">@dimen/half_margin</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
+    <style name="ShapedButton">
+        <item name="mfb_defaultColor">@color/stone</item>
+        <item name="mfb_textColor">@color/white</item>
+        <item name="mfb_focusColor">@color/focusColor</item>
+        <item name="mfb_radius">@dimen/half_margin</item>
+        <item name="android:layout_height">@dimen/forty_margin</item>
+        <item name="android:layout_width">@dimen/two_h_margin</item>
+        <item name="android:paddingTop">@dimen/ten_dp_margin</item>
+        <item name="android:paddingBottom">@dimen/ten_dp_margin</item>
+    </style>
 
+    <style name="CircleButton">
+        <item name="mfb_focusColor">@color/focusColor</item>
+        <item name="mfb_radius">@dimen/forty_margin</item>
+        <item name="mfb_iconPaddingLeft">0dp</item>
+        <item name="mfb_iconPaddingRight">0dp</item>
+        <item name="android:layout_height">@dimen/forty_margin</item>
+        <item name="android:layout_width">@dimen/forty_margin</item>
+
+    </style>
 </resources>

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryDark">#514d4d</color>
     <color name="colorAccent">#FF5722</color>
 
-    <color name="hot_orange">#ec3620</color>
+    <color name="hotOrange">#ec3620</color>
     <color name="stone">#514d4d</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="lime">#7ab800</color>
     <color name="red">#d34836</color>
     <color name="blue">#3b5998</color>
-    <color name="box_background">#dfdddd</color>
-    <color name="black_40_trans">#4D000000</color>
+    <color name="boxBackground">#dfdddd</color>
+    <color name="black40Trans">#4D000000</color>
+    <color name="focusColor">#313131</color>
 
 </resources>

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<dimen name="half_margin">8dp</dimen>
-<dimen name="default_margin">16dp</dimen>
-<dimen name="twenty_margin">24dp</dimen>
-<dimen name="ddble_margin">32dp</dimen>
-<dimen name="quadro_margin">64dp</dimen>
+    <!--> Margin <-->
+    <dimen name="half_margin">8dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="twenty_margin">24dp</dimen>
+    <dimen name="ddble_margin">32dp</dimen>
+    <dimen name="quadro_margin">64dp</dimen>
+    <dimen name="forty_margin">40dp</dimen>
+    <dimen name="two_h_margin">200dp</dimen>
+
+    <!--> Text size <-->
+    <dimen name="big_text">32sp</dimen>
+    <dimen name="ten_dp_margin">10dp</dimen>
 </resources>

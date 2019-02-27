@@ -1,7 +1,7 @@
 <resources>
 
     <!-- General -->
-    <string name="app_name">BabushkaChat</string>
+    <string name="app_name">Free to talk</string>
     <string name="message_double_click_exit">Click BACK again to exit</string>
 
 
@@ -21,5 +21,5 @@
     <!-- System constants -->
     <string name="facebook_id">2113412368720227</string>
     <string name="facebook_schema_id">fb2113412368720227</string>
-    <string name="firebase_id">149036140724-8r2vfibqp770s82t902rse3oqe9jfv35.apps.googleusercontent.com</string>
+    <string name="firebase_id">149036140724-48i02h2lv15ao8f0m9u99820ll34uakk.apps.googleusercontent.com</string>
 </resources>
