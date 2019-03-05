@@ -68,6 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:$firebaseAuth") {
         exclude group: "com.android.support"
     }
+
     //Google auth
     implementation("com.google.android.gms:play-services-auth:$googleAuth") {
         exclude group: "com.android.support"

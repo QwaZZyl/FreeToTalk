@@ -5,15 +5,15 @@ package com.karavatskiy.serhii.freetotalkchat.data;
  */
 public class UserCard {
 
-    private String UserName;
+    private String userName;
     private String email;
     private String userPhotoPath;
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
     public void setUserName(final String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
     public String getEmail() {

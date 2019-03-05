@@ -26,7 +26,6 @@ public class LoginFragmentTest {
     private static final String PASSWORD_WITH_SPACE = "12345 6";
     private static final String PASSWORD_VALID = "123456";
 
-
     @Rule
     public ActivityTestRule<LoginActivity> activityTestRule = new ActivityTestRule<>(LoginActivity.class);
 
@@ -68,7 +67,4 @@ public class LoginFragmentTest {
         onView(withId(R.id.tvCreateAcc)).perform(click());
         onView(withId(R.id.tvSignUp)).check(matches(isDisplayed()));
     }
-
 }
-
-// TODO: 16.02.2019 registration test handle error messages
