@@ -29,9 +29,13 @@ import com.karavatskiy.serhii.freetotalkchat.base.callback.OnCompleteListener;
 import com.karavatskiy.serhii.freetotalkchat.base.presenter.BasePresenter;
 import com.karavatskiy.serhii.freetotalkchat.utils.FirebaseRx;
 import com.karavatskiy.serhii.freetotalkchat.utils.LogUtils;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.util.Arrays;
 
@@ -62,7 +66,6 @@ public class LoginFragmentPresenter extends BasePresenter {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
                     LogUtils.logDebug(TAG, "facebook:onSuccess:" + loginResult);
-                    firebaseAuthWithFacebookCredential(loginResult.getAccessToken());
                     emitter.onSuccess(loginResult.getAccessToken());
                 }
 
@@ -77,12 +80,16 @@ public class LoginFragmentPresenter extends BasePresenter {
                     LogUtils.logDebug(TAG, "facebook:onError" + error);
                 }
             });
-
         });
     }
 
     void facebookSignIn(Fragment fragment) {
-        rxSubscribeFacebook().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        Disposable disposable = rxSubscribeFacebook().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(this::firebaseAuthWithFacebookCredential)
+                .subscribe();
+        compositeDisposable.add(disposable);
+
         LoginManager.getInstance().logInWithReadPermissions(fragment, Arrays.asList(PROFILE_FACEBOOK_PROPERTIES));
     }
 
@@ -90,17 +97,18 @@ public class LoginFragmentPresenter extends BasePresenter {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void firebaseAuthWithFacebookCredential(AccessToken token) {
+    private Single firebaseAuthWithFacebookCredential(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         Disposable disposable = FirebaseRx.signInWithCredential(firebaseAuth, credential)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(firebaseUser -> {
-                            onCompleteListener.onSuccess();
                             LogUtils.logDebug(TAG,
                                     "firebaseAuthWithFacebookCredential:" + firebaseUser.getDisplayName());
+                            onCompleteListener.onSuccess();
                         },
                         throwable -> onCompleteListener.onError(throwable));
         compositeDisposable.add(disposable);
+        return Single.just(new Object());
     }
 
     void signInWithGoogle(LoginFragment loginFragment) {
@@ -115,11 +123,10 @@ public class LoginFragmentPresenter extends BasePresenter {
                 .requestEmail()
                 .build();
         googleApiClient = new Builder(fragment.requireContext()).enableAutoManage(fragment.requireActivity(),
-                connectionResult -> LogUtils
-                        .logDebug(TAG, "createGoogleApiClient: " + connectionResult.getErrorMessage()))
+                connectionResult -> LogUtils.logDebug(TAG,
+                        "createGoogleApiClient: " + connectionResult.getErrorMessage()))
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions).build();
     }
-
 
     void googleSignInResult(Intent data) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -137,8 +144,9 @@ public class LoginFragmentPresenter extends BasePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(firebaseUser -> {
+                            LogUtils.logDebug(TAG,
+                                    "firebaseAuthWithGoogleCredential: " + firebaseUser.getEmail());
                             onCompleteListener.onSuccess();
-                            LogUtils.logDebug(TAG, "firebaseAuthWithGoogleCredential: " + firebaseUser.getEmail());
                         }
                         ,
                         throwable -> onCompleteListener.onError(throwable));
@@ -149,7 +157,10 @@ public class LoginFragmentPresenter extends BasePresenter {
         Disposable disposable = FirebaseRx.signInWithEmailAndPassword(firebaseAuth, email, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(firebaseUser -> onCompleteListener.onSuccess(),
+                .subscribe(firebaseUser -> {
+                            LogUtils.logDebug(TAG, "signInFirebaseEmail: " + firebaseUser.getEmail());
+                            onCompleteListener.onSuccess();
+                        },
                         throwable -> onCompleteListener.onError(throwable));
         compositeDisposable.add(disposable);
     }

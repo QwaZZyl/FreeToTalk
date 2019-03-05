@@ -13,7 +13,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class RegistrationFragmentPresenter extends BasePresenter {
 
-
     private FirebaseAuth firebaseAuth;
     private OnCompleteListener onCompleteListener;
 
@@ -21,7 +20,6 @@ public class RegistrationFragmentPresenter extends BasePresenter {
         super();
         this.firebaseAuth = firebaseAuth;
     }
-
 
     public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
         this.onCompleteListener = onCompleteListener;
