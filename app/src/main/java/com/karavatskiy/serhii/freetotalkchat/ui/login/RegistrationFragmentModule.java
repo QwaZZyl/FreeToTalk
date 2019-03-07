@@ -1,7 +1,6 @@
 package com.karavatskiy.serhii.freetotalkchat.ui.login;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.karavatskiy.serhii.freetotalkchat.base.callback.OnCompleteListener;
 import com.karavatskiy.serhii.freetotalkchat.utils.ValidatorSignIn;
 import dagger.Module;

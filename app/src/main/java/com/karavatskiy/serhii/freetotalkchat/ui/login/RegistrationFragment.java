@@ -2,7 +2,6 @@ package com.karavatskiy.serhii.freetotalkchat.ui.login;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.View;
 import butterknife.BindView;
 import com.karavatskiy.serhii.freetotalkchat.R;

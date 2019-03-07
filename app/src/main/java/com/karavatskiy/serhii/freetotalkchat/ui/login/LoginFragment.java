@@ -5,7 +5,6 @@ import static com.karavatskiy.serhii.freetotalkchat.ui.login.LoginFragmentPresen
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import butterknife.BindView;

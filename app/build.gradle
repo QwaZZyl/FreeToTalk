@@ -80,7 +80,7 @@ dependencies {
     }
 
     //views buttons
-    implementation "com.rilixtech:materialfancybuttons:1.8.7"
+    implementation "com.rilixtech:materialfancybuttons:$materialfancybuttons"
 
     apply plugin: "com.google.gms.google-services"
 
