@@ -42,7 +42,6 @@ public class RegistrationFragment extends BaseFragmentDI<LoginActivity> implemen
         return fragment;
     }
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_registration;

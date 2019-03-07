@@ -61,8 +61,7 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
     @Override
     protected void initOnClickListeners() {
         tvCreateAcc.setOnClickListener(v -> activity.showSignUpFragment());
-        btnSignInFace.setOnClickListener(v ->
-        {
+        btnSignInFace.setOnClickListener(v -> {
             activity.showProgress(true);
             presenter.facebookSignIn(this);
         });
@@ -90,6 +89,7 @@ public class LoginFragment extends BaseFragmentDI<LoginActivity>
             presenter.facebookSignInResult(requestCode, resultCode, data);
         } else if (requestCode == RC_SIGN_IN_GOOGLE) {
             presenter.googleSignInResult(data);
+
         }
     }
 
